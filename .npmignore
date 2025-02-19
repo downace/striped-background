@@ -1,0 +1,11 @@
+/.idea
+/.yarn
+/.github
+.yarnrc.yml
+build.js
+index.ts
+tsconfig.json
+tsconfig.*.json
+examples.html
+example.png
+striped-background-*.tgz

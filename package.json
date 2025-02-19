@@ -1,0 +1,48 @@
+{
+  "name": "striped-background",
+  "version": "0.1.2",
+  "description": "Generate customizable striped backgrounds using CSS gradients",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/downace/striped-background.git"
+  },
+  "keywords": [
+    "css",
+    "striped",
+    "background",
+    "gradient"
+  ],
+  "author": "downace <monstion@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/downace/striped-background/issues"
+  },
+  "homepage": "https://github.com/downace/striped-background#readme",
+  "devDependencies": {
+    "@types/shelljs": "^0",
+    "prettier": "^3.5.1",
+    "shelljs": "^0.8.5",
+    "typescript": "^5.7.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/_types/index.d.ts",
+      "require": "./dist/_cjs/index.js",
+      "import": "./dist/_esm/index.js",
+      "default": "./dist/_esm/index.js"
+    }
+  },
+  "typesVersions": {
+    ">=4.2": {
+      "*": [
+        "_types/*"
+      ]
+    }
+  },
+  "types": "./index.d.ts",
+  "packageManager": "yarn@4.4.0+sha512.91d93b445d9284e7ed52931369bc89a663414e5582d00eea45c67ddc459a2582919eece27c412d6ffd1bd0793ff35399381cb229326b961798ce4f4cc60ddfdb"
+}

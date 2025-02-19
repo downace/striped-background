@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Striped Background Examples</title>
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+        }
+
+        #examples {
+            display: flex;
+        }
+
+        #examples-left {
+            width: 90px;
+            padding: 20px;
+        }
+
+        #examples-left > .example {
+            height: 100%;
+        }
+
+        #examples-middle {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .example {
+            height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+            font-family: monospace;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .example:not(:last-of-type) {
+            margin-bottom: 20px;
+        }
+
+        .example.vertical {
+            height: auto;
+            width: 90px;
+        }
+
+        .example.vertical > .example-code {
+            writing-mode: sideways-lr;
+        }
+
+        .example-code {
+            background-color: white;
+            color: black;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+    </style>
+    <script type="module">
+        import stripedBackground from './dist/_esm/index.js';
+
+        const examples = [
+            [
+                [
+                    ['black', 20],
+                    ['yellow', 20],
+                ],
+            ],
+            [
+                [
+                    ['#dbdad8', 20],
+                    ['#afbcc2', 20],
+                    ['#769eaa', 20],
+                    ['#2e7786', 20],
+                    ['#769eaa', 20],
+                    ['#afbcc2', 20],
+                ],
+                -60,
+            ],
+            [
+                [
+                    ['#ffffff', 40],
+                    ['rgb(244, 0, 39)', 30],
+                ],
+                '0.25turn',
+            ],
+            [
+                [
+                    ['#2674b6', 10],
+                    ['#ffffff', 10],
+                ],
+                0,
+            ],
+            [
+                [
+                    ['#fff', 0.2],
+                    ['#eee', 2.6],
+                    ['#ddd', 5.0],
+                    ['#ccc', 7.0],
+                    ['#bbb', 8.7],
+                    ['#aaa', 9.7],
+                    ['#999', 9.9],
+                    ['#888', 9.7],
+                    ['#777', 8.7],
+                    ['#666', 7.0],
+                    ['#555', 5.0],
+                    ['#444', 2.6],
+                    ['#333', 0.2],
+                ],
+                '90deg',
+            ],
+            [
+                [
+                    ['rebeccapurple', 50],
+                    ['transparent', 150],
+                ],
+                -30,
+            ],
+            [
+                [
+                    ['teal', 30],
+                ],
+            ],
+            [
+                [],
+            ],
+        ];
+
+        const container = document.getElementById('examples');
+        Object.assign(container.style, stripedBackground([
+            ['#ffeeee', 10],
+            ['#eeffee', 10],
+            ['#eeeeff', 10],
+        ]));
+
+        const middle = document.getElementById('examples-middle');
+
+        for (const args of examples) {
+            const div = document.createElement('div');
+            div.classList.add('example');
+            div.innerHTML = `<div class="example-code">stripedBackground(${args.map(arg => JSON.stringify(arg))})</div>`;
+            middle.appendChild(div);
+            Object.assign(div.style, stripedBackground(...args));
+        }
+
+        (() => {
+            const el = document.createElement('div');
+            el.classList.add('example', 'vertical');
+            document.getElementById('examples-left').appendChild(el);
+
+            let prevTimestamp;
+            let offset = 0;
+            const speed = 50 / 1000; // pixels per millisecond
+
+            function step(timestamp) {
+                if (prevTimestamp === undefined) {
+                    prevTimestamp = timestamp;
+                    requestAnimationFrame(step);
+                    return;
+                }
+                const time = timestamp - prevTimestamp;
+
+                const distance = time * speed;
+                const args = [
+                    [
+                        ['#ee1c25', 50],
+                        ['#ffffff', 50],
+                        ['#1b76bc', 50],
+                        ['#ffffff', 50],
+                    ],
+                    -45,
+                    Math.round(offset = (offset - distance) % 200),
+                ]
+                Object.assign(el.style, stripedBackground(...args));
+                el.innerHTML = `<div class="example-code">stripedBackground(${args.map(arg => JSON.stringify(arg))})</div>`;
+                prevTimestamp = timestamp;
+                requestAnimationFrame(step);
+            }
+
+            requestAnimationFrame(step);
+        })();
+
+    </script>
+</head>
+<body>
+<div id="examples">
+    <div id="examples-left"></div>
+    <div id="examples-middle"></div>
+</div>
+</body>
+</html>
