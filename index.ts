@@ -26,26 +26,29 @@ function parseStringAngle(angle: string): [value: number, unit: AngleUnit] {
 
 function normalizeAngle(
   angle: number | string,
-): [angleInRadians: number, angleWithUnit: string] {
+): [angle: number, unit: AngleUnit] {
   const [value, unit] =
     typeof angle === "string"
       ? parseStringAngle(angle)
       : ([angle, "deg"] as const);
 
-  return [
-    clampAngle((value * Math.PI) / unitToHalfCircleValue[unit]),
-    `${value}${unit}`,
-  ];
+  return [clampAngle(value, unit), unit];
+}
+
+function convertAngle(value: number, from: AngleUnit, to: AngleUnit) {
+  return (value * unitToHalfCircleValue[to]) / unitToHalfCircleValue[from];
 }
 
 // Clamp to -180..180 degrees range.
-function clampAngle(angleInRadians: number) {
-  let res = angleInRadians % Math.PI;
-  if (res > Math.PI) {
-    res = res - Math.PI - Math.PI;
+function clampAngle(angle: number, unit: AngleUnit) {
+  const halfCircle = unitToHalfCircleValue[unit];
+  const fullCircle = halfCircle + halfCircle;
+  let res = angle % fullCircle;
+  if (res > halfCircle) {
+    res = res - fullCircle;
   }
-  if (res < -Math.PI) {
-    res = res + Math.PI + Math.PI;
+  if (res < -halfCircle) {
+    res = res + fullCircle;
   }
   return res;
 }
@@ -110,7 +113,9 @@ export default function stripedBackground(
       backgroundColor: pattern[0][0],
     };
   }
-  const [angleRadians, angleWithUnit] = normalizeAngle(angle);
+
+  const [angleNormalized, unit] = normalizeAngle(angle);
+  const angleRadians = convertAngle(angleNormalized, unit, "rad");
 
   // When angle is multiple of 45 degrees (1/8 of full circle), transition smoothing is not necessary.
   const smoothing = angleIsMultipleOf45Degrees(angleNormalized, unit) ? 0 : 0.5;
@@ -136,10 +141,7 @@ export default function stripedBackground(
 
   return {
     // Normalize angle value, but do not apply rounding and unit conversion to keep original precision.
-    backgroundImage: `linear-gradient(
-      ${angleWithUnit},
-      ${colorStops.join(", ")}
-    )`,
+    backgroundImage: `linear-gradient(${angleNormalized}${unit}, ${colorStops.join(", ")})`,
     backgroundPosition: `top ${round(-offsetY)}px left ${round(offsetX)}px`,
     backgroundSize: `${round(bgWidth)}px ${round(bgHeight)}px`,
   };
