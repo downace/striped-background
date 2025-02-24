@@ -1,5 +1,7 @@
 type AngleUnit = "deg" | "grad" | "rad" | "turn";
 
+export type AngleString = `${number}${AngleUnit | ""}`;
+
 // https://developer.mozilla.org/en-US/docs/Web/CSS/angle#units
 const unitToHalfCircleValue: Record<AngleUnit, number> = {
   deg: 180,
@@ -76,7 +78,7 @@ function calcBgDimensions(
  */
 export default function stripedBackground(
   pattern: [color: string, length: number][],
-  angle: number | string = 45,
+  angle: number | AngleString = 45,
   offset = 0,
 ): Partial<
   Pick<
