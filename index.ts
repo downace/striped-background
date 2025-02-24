@@ -5,7 +5,6 @@ export type AngleString = `${number}${AngleUnit | ""}`;
 // https://developer.mozilla.org/en-US/docs/Web/CSS/angle#units
 const unitToHalfCircleValue: Record<AngleUnit, number> = {
   deg: 180,
-
   grad: 200,
   rad: Math.PI,
   turn: 0.5,
@@ -69,6 +68,18 @@ function calcBgDimensions(
   ];
 }
 
+// 6 should be enough: Chrome rounds to 6 places automatically and everything looks good.
+// Used primarily for improved tests readability.
+const cssPrecision = 6;
+
+function round(value: number) {
+  return Number(value.toPrecision(cssPrecision));
+}
+
+function angleIsMultipleOf45Degrees(value: number, unit: AngleUnit) {
+  return round(value) % round(unitToHalfCircleValue[unit] / 4) === 0;
+}
+
 /**
  * @param pattern Array of tuples
  * @param angle Pattern rotation angle.
@@ -101,8 +112,8 @@ export default function stripedBackground(
   }
   const [angleRadians, angleWithUnit] = normalizeAngle(angle);
 
-  // When angle is multiple of 45, transition smoothing is not necessary.
-  const smoothing = angleRadians % (Math.PI / 4) ? 0.5 : 0;
+  // When angle is multiple of 45 degrees (1/8 of full circle), transition smoothing is not necessary.
+  const smoothing = angleIsMultipleOf45Degrees(angleNormalized, unit) ? 0 : 0.5;
 
   const colorStops = [];
   let currentOffset = 0;
@@ -124,11 +135,12 @@ export default function stripedBackground(
   const [bgWidth, bgHeight] = calcBgDimensions(patternLength, angleRadians);
 
   return {
+    // Normalize angle value, but do not apply rounding and unit conversion to keep original precision.
     backgroundImage: `linear-gradient(
       ${angleWithUnit},
       ${colorStops.join(", ")}
     )`,
-    backgroundPosition: `top ${-offsetY}px left ${offsetX}px`,
-    backgroundSize: `${bgWidth}px ${bgHeight}px`,
+    backgroundPosition: `top ${round(-offsetY)}px left ${round(offsetX)}px`,
+    backgroundSize: `${round(bgWidth)}px ${round(bgHeight)}px`,
   };
 }
