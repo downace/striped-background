@@ -15,12 +15,12 @@ function parseStringAngle(angle: string): [value: number, unit: AngleUnit] {
   if (!Number.isFinite(value)) {
     throw new Error(`Unable to parse angle: ${angle}`);
   }
-  const regexResult = /[^A-z](deg|grad|rad|turn)\s*$/.exec(angle);
+  const regexResult = /[^A-z](deg|grad|rad|turn)?\s*$/.exec(angle);
   if (!regexResult) {
     throw new Error(`Unable to parse angle: ${angle}`);
   }
 
-  return [value, regexResult[1] as AngleUnit];
+  return [value, (regexResult[1] as AngleUnit | undefined) ?? "deg"];
 }
 
 function normalizeAngle(
@@ -70,7 +70,7 @@ function calcBgDimensions(
 /**
  * @param pattern Array of tuples
  * @param angle Pattern rotation angle.
- *              Number will be treated as degrees.
+ *              Number or numeric string will be treated as degrees.
  *              String can contain CSS angle unit, e.g. `45deg`, `50grad`, `0.7854rad`, `0.125turn`
  * @param offset Pattern offset, in pixels
  */
