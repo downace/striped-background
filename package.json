@@ -4,7 +4,8 @@
   "description": "Generate customizable striped backgrounds using CSS gradients",
   "main": "index.js",
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,12 @@
   },
   "homepage": "https://github.com/downace/striped-background#readme",
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/shelljs": "^0",
+    "jest": "^29.7.0",
     "prettier": "^3.5.1",
     "shelljs": "^0.8.5",
+    "ts-jest": "^29.2.6",
     "typescript": "^5.7.3"
   },
   "exports": {

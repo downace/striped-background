@@ -1,6 +1,7 @@
 .idea
 dist
 node_modules
+coverage
 
 # Yarn
 .pnp.*
@@ -10,3 +11,5 @@ node_modules
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+yarn.lock

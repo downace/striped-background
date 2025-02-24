@@ -4,8 +4,12 @@
 .yarnrc.yml
 build.js
 index.ts
+*.test.ts
 tsconfig.json
 tsconfig.*.json
 examples.html
 example.png
+jest.config.js
 striped-background-*.tgz
+
+/coverage
