@@ -15,9 +15,12 @@
     "css",
     "striped",
     "background",
-    "gradient"
+    "gradient",
+    "stripy",
+    "background-image",
+    "linear-gradient"
   ],
-  "author": "downace <monstion@gmail.com>",
+  "author": "Sergei Malchits <monstion@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/downace/striped-background/issues"
